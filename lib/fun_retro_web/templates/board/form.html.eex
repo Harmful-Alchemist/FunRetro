@@ -1,0 +1,63 @@
+<%= form_for @changeset, @action, fn f -> %>
+
+<script>
+function addLane() {
+    var random = Math.random();
+    var form = document.getElementById("lane_inputs");
+    var newLaneInput = document.createElement("input");
+    newLaneInput.id = "board_lanes" + random;
+    newLaneInput.name = "board[lanes][]";
+    newLaneInput.type= "text";
+
+    var removeButton = document.createElement("button");
+    removeButton.type="button";
+    removeButton.id="remove"+random;
+    removeButton.class="btn btn-default btn-sm";
+    removeButton.setAttribute("onclick", "removeLane("+random+")");
+    var text = document.createTextNode("Remove lane");
+    removeButton.appendChild(text);
+
+    form.appendChild(newLaneInput);
+    form.appendChild(removeButton);
+}
+
+function removeLane(id) {
+    document.getElementById("board_lanes" + id).remove();
+    document.getElementById("remove" + id).remove();
+}
+</script>
+
+
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+
+  <%= label f, :name %>
+  <%= text_input f, :name %>
+  <%= error_tag f, :name %>
+
+  <%= label f, :lanes %>
+  <div id="lane_inputs">
+      <%= if !@changeset.data.lanes do  %>
+        <% random = :rand.uniform() %>
+        <%= text_input f, :lanes, name: "board[lanes][]", id: "board_lanes#{random}" %>
+        <button type="button" id="remove<%= random %>" class="btn btn-default btn-sm" onclick="removeLane('<%= random %>')">Remove lane</button>
+      <% else %>
+        <%= for lane <- @changeset.data.lanes do %>
+          <% random = :rand.uniform() %>
+          <%= text_input f, :lanes, name: "board[lanes][]", value: lane, id: "board_lanes#{random}" %>
+          <button type="button" id="remove<%= random %>" class="btn btn-default btn-sm" onclick="removeLane('<%= random %>')">Remove lane</button>
+        <% end %>
+      <% end %>
+  </div>
+  <button type="button" class="btn btn-default btn-sm" onclick="addLane()">Add lane</button>
+  <%= error_tag f, :lanes %>
+
+  <div>
+    <%= submit "Save" %>
+  </div>
+
+<% end %>

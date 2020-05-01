@@ -1,0 +1,67 @@
+<h1>Edit Drawing</h1>
+
+<%= render "form.html", Map.put(assigns, :action, Routes.board_drawing_path(@conn, :update, @drawing.board_id, @drawing)) %>
+
+<span><%= link "Back", to: Routes.board_path(@conn, :show,  @drawing.board_id) %></span>
+
+<script>
+  var canvas_input = document.getElementById("canvas_input");
+  var canvas_color = document.getElementById("canvas_color").value;
+  var brush_size = document.getElementById("brush_size")
+
+  function addBrushSizes() {
+      for(var i=1; i<11; i++){
+          var sizeOption = document.createElement("option");
+          sizeOption.text = i;
+          sizeOption.value = i;
+          brush_size.options.add(sizeOption);
+      }
+  }
+  window.onLoad=addBrushSizes();
+
+  canvas_input.addEventListener('mousemove', draw);
+  canvas_input.addEventListener('mousedown', setPosition);
+  canvas_input.addEventListener('mouseenter', setPosition);
+
+  //document.body.style.margin = 0;
+  //canvas_input.style.position = 'fixed';
+
+  var ctx = canvas_input.getContext('2d');
+
+  var pos = { x: 0, y: 0 };
+
+  function setPosition(e) {
+    var rect = canvas_input.getBoundingClientRect();
+    pos.x = e.clientX - rect.left;
+    pos.y = e.clientY - rect.top;
+  }
+
+  function draw(e) {
+    // mouse left button must be pressed
+    if (e.buttons !== 1) {
+      return;
+    }
+
+    canvas_color = document.getElementById("canvas_color").value;
+
+    ctx.beginPath(); // begin
+
+    ctx.lineWidth = brush_size.value;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = canvas_color;
+
+    ctx.moveTo(pos.x, pos.y); // from
+    setPosition(e);
+    ctx.lineTo(pos.x, pos.y); // to
+    ctx.stroke(); // draw it!
+    document.getElementById("drawing_drawing").value = getInputImageData();
+  }
+
+
+  function getInputImageData() {
+      return ctx.getImageData(0,0,canvas_input.width,canvas_input.height).data;
+  }
+
+  var data_array = new Uint8ClampedArray("<%= @drawing.drawing %>".split(","));
+  ctx.putImageData(new ImageData(data_array, canvas_input.width, canvas_input.height),0,0);
+</script>

@@ -1,0 +1,21 @@
+<h1>Show Drawing</h1>
+
+<ul>
+
+  <li>
+    <strong>Drawing:</strong>
+    <%= @drawing.lane %>
+    <canvas id="canvas_output<%= @drawing.id %>" width="400" height="200" style="border: 2px solid black;"></canvas>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.board_drawing_path(@conn, :edit, @drawing.board_id, @drawing) %></span>
+<span><%= link "Back", to: Routes.board_path(@conn, :show,  @drawing.board_id) %></span>
+
+<script>
+  var canvas_output = document.getElementById("canvas_output<%= @drawing.id %>");
+  var ctx_output = canvas_output.getContext('2d');
+  var data_array = new Uint8ClampedArray("<%= @drawing.drawing %>".split(","));
+  ctx_output.putImageData(new ImageData(data_array, canvas_output.width, canvas_output.height),0,0);
+</script>

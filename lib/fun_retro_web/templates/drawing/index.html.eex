@@ -1,0 +1,34 @@
+<h1>Listing Drawings</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Drawing</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for drawing <- @drawings do %>
+    <tr>
+      <td><canvas id="canvas_output<%= drawing.id %>" width="400" height="200" style="border: 2px solid black;"></canvas></td>
+
+        <script>
+          var canvas_output = document.getElementById("canvas_output<%= drawing.id %>");
+          var ctx_output = canvas_output.getContext('2d');
+          var data_array = new Uint8ClampedArray("<%= drawing.drawing %>".split(","));
+
+          ctx_output.putImageData(new ImageData(data_array, canvas_output.width, canvas_output.height),0,0);
+        </script>
+
+      <td>
+        <span><%= link "Show", to: Routes.board_drawing_path(@conn, :show, drawing.board_id, drawing) %></span>
+        <span><%= link "Edit", to: Routes.board_drawing_path(@conn, :edit, drawing.board_id, drawing) %></span>
+        <span><%= link "Delete", to: Routes.board_drawing_path(@conn, :delete, drawing.board_id, drawing), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Drawing", to: Routes.board_drawing_path(@conn, :new, @board_id) %></span>
