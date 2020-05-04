@@ -45,6 +45,7 @@ defmodule FunRetroWeb.BoardController do
     case Retros.update_board(board, board_params) do
       {:ok, board} ->
         LiveUpdates.notify_live_view(board.id, board.id)
+
         conn
         |> put_flash(:info, "Board updated successfully.")
         |> redirect(to: Routes.board_path(conn, :show, board))

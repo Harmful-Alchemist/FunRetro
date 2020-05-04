@@ -26,6 +26,7 @@ defmodule FunRetroWeb.DrawingController do
     case Retros.create_drawing(Map.put(drawing_params, "board_id", board_id)) do
       {:ok, drawing} ->
         LiveUpdates.notify_live_view(board_id, board_id)
+
         conn
         |> put_flash(:info, "Drawing created successfully.")
         |> redirect(to: Routes.board_path(conn, :show, drawing.board_id))
@@ -57,6 +58,7 @@ defmodule FunRetroWeb.DrawingController do
     case Retros.update_drawing(drawing, drawing_params) do
       {:ok, drawing} ->
         LiveUpdates.notify_live_view(drawing.board_id, drawing.board_id)
+
         conn
         |> put_flash(:info, "Drawing updated successfully.")
         |> redirect(to: Routes.board_path(conn, :show, drawing.board_id))
@@ -70,6 +72,7 @@ defmodule FunRetroWeb.DrawingController do
     drawing = Retros.get_drawing!(id)
     {:ok, _drawing} = Retros.delete_drawing(drawing)
     LiveUpdates.notify_live_view(drawing.board_id, drawing.board_id)
+
     conn
     |> put_flash(:info, "Drawing deleted successfully.")
     |> redirect(to: Routes.board_path(conn, :show, drawing.board_id))
