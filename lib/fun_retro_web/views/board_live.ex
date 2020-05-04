@@ -1,5 +1,5 @@
 defmodule FunRetroWeb.BoardLive do
-  use Phoenix.LiveView, layout: {GalleryWeb.LayoutView, "live.html"}
+  use Phoenix.LiveView, layout: {FunRetroWeb.LayoutView, "live.html"}
 
   alias FunRetro.Retros
   alias FunRetro.Retros.LiveUpdates
