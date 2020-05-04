@@ -4,9 +4,11 @@ defmodule FunRetroWeb.Router do
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
-    plug :fetch_flash
+    #    plug :fetch_flash
+    plug :fetch_live_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :put_root_layout, {FunRetroWeb.LayoutView, :root}
   end
 
   pipeline :api do
@@ -17,6 +19,8 @@ defmodule FunRetroWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+
+    live "/boardslive/:id/", BoardLive
 
     resources "/boards", BoardController do
       resources "/drawings", DrawingController

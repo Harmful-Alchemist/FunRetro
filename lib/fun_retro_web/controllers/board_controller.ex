@@ -3,6 +3,7 @@ defmodule FunRetroWeb.BoardController do
 
   alias FunRetro.Retros
   alias FunRetro.Retros.Board
+  alias FunRetro.Retros.LiveUpdates
 
   def index(conn, _params) do
     boards = Retros.list_boards()
@@ -27,8 +28,9 @@ defmodule FunRetroWeb.BoardController do
   end
 
   def show(conn, %{"id" => id}) do
-    board = Retros.get_board!(id)
-    render(conn, "show.html", board: board)
+    redirect(conn,
+      to: Routes.live_path(FunRetroWeb.Endpoint, FunRetroWeb.BoardLive, %Board{id: id})
+    )
   end
 
   def edit(conn, %{"id" => id}) do
@@ -42,6 +44,7 @@ defmodule FunRetroWeb.BoardController do
 
     case Retros.update_board(board, board_params) do
       {:ok, board} ->
+        LiveUpdates.notify_live_view(board.id, board.id)
         conn
         |> put_flash(:info, "Board updated successfully.")
         |> redirect(to: Routes.board_path(conn, :show, board))

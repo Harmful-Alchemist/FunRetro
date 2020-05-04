@@ -3,6 +3,7 @@ defmodule FunRetroWeb.DrawingController do
 
   alias FunRetro.Retros
   alias FunRetro.Retros.Drawing
+  alias FunRetro.Retros.LiveUpdates
 
   def index(conn, params) do
     IO.inspect(params)
@@ -24,9 +25,10 @@ defmodule FunRetroWeb.DrawingController do
   def create(conn, %{"drawing" => drawing_params, "board_id" => board_id}) do
     case Retros.create_drawing(Map.put(drawing_params, "board_id", board_id)) do
       {:ok, drawing} ->
+        LiveUpdates.notify_live_view(board_id, board_id)
         conn
         |> put_flash(:info, "Drawing created successfully.")
-        |> redirect(to: Routes.board_drawing_path(conn, :show, drawing.board_id, drawing))
+        |> redirect(to: Routes.board_path(conn, :show, drawing.board_id))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", board_id: board_id, changeset: changeset)
@@ -54,9 +56,10 @@ defmodule FunRetroWeb.DrawingController do
 
     case Retros.update_drawing(drawing, drawing_params) do
       {:ok, drawing} ->
+        LiveUpdates.notify_live_view(drawing.board_id, drawing.board_id)
         conn
         |> put_flash(:info, "Drawing updated successfully.")
-        |> redirect(to: Routes.board_drawing_path(conn, :show, drawing.board_id, drawing))
+        |> redirect(to: Routes.board_path(conn, :show, drawing.board_id))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", drawing: drawing, changeset: changeset)
@@ -66,9 +69,9 @@ defmodule FunRetroWeb.DrawingController do
   def delete(conn, %{"id" => id}) do
     drawing = Retros.get_drawing!(id)
     {:ok, _drawing} = Retros.delete_drawing(drawing)
-
+    LiveUpdates.notify_live_view(drawing.board_id, drawing.board_id)
     conn
     |> put_flash(:info, "Drawing deleted successfully.")
-    |> redirect(to: Routes.board_drawing_path(conn, :index, drawing.board_id))
+    |> redirect(to: Routes.board_path(conn, :show, drawing.board_id))
   end
 end
