@@ -15,8 +15,9 @@ defmodule FunRetroWeb.Auth do
     IO.inspect(conn)
     conn = update_in(conn.assigns, &Map.put(&1, :current_board, board))
     IO.inspect(conn)
+
     conn
-#    |> assign(:current_board, board)
+    #    |> assign(:current_board, board)
     |> put_session(:board_id_auth, board.id)
     |> configure_session(renew: true)
   end

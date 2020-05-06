@@ -73,6 +73,7 @@ defmodule FunRetroWeb.BoardController do
   defp authenticate(%{params: %{"id" => board_id}} = conn, _opts) do
     IO.puts("hellooooooooo")
     IO.inspect(conn)
+
     if conn.assigns.current_board && "#{conn.assigns.current_board.id}" == board_id do
       conn
     else

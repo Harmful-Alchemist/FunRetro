@@ -7,6 +7,7 @@ defmodule FunRetroWeb.AuthController do
 
   def create(conn, %{"board_id" => board_id, "session" => %{"password" => pass}}) do
     IO.inspect(board_id)
+
     case FunRetro.Retros.authenticate_board(board_id, pass) do
       {:ok, board} ->
         conn
