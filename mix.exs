@@ -45,7 +45,8 @@ defmodule FunRetro.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:phoenix_live_view, "~> 0.12.1"}
+      {:phoenix_live_view, "~> 0.12.1"},
+      {:pbkdf2_elixir, "~> 1.0"}
     ]
   end
 

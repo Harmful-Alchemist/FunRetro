@@ -5,8 +5,9 @@ defmodule FunRetroWeb.DrawingController do
   alias FunRetro.Retros.Drawing
   alias FunRetro.Retros.LiveUpdates
 
+  plug :authenticate
+
   def index(conn, params) do
-    IO.inspect(params)
     drawings = Retros.list_drawings(params["board_id"])
     render(conn, "index.html", drawings: drawings, board_id: params["board_id"])
   end
@@ -76,5 +77,19 @@ defmodule FunRetroWeb.DrawingController do
     conn
     |> put_flash(:info, "Drawing deleted successfully.")
     |> redirect(to: Routes.board_path(conn, :show, drawing.board_id))
+  end
+
+  defp authenticate(%{params: %{"board_id" => board_id}} = conn, _opts) do
+    if conn.assigns.current_board && "#{conn.assigns.current_board.id}" == board_id do
+      conn
+    else
+      conn
+      |> put_flash(
+        :error,
+        "You must be have access to this board please authenticate with a password"
+      )
+      |> redirect(to: Routes.board_auth_path(conn, :new, board_id))
+      |> halt()
+    end
   end
 end

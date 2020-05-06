@@ -8,7 +8,7 @@ defmodule FunRetroWeb.BoardLive do
     Phoenix.View.render(FunRetroWeb.BoardView, "show.html", assigns)
   end
 
-  def mount(%{"id" => id}, _session, socket) do
+  def mount(_params, %{"id" => id}, socket) do
     LiveUpdates.subscribe_live_view(id)
     board = Retros.get_board!(id)
     {:ok, assign(socket, board: board)}

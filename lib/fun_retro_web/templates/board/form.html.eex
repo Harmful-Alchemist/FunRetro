@@ -56,6 +56,12 @@ function removeLane(id) {
   <button type="button" class="btn btn-default btn-sm" onclick="addLane()">Add lane</button>
   <%= error_tag f, :lanes %>
 
+  <%= if @action == "/boards" do %>
+    <%= label f, :password %>
+    <%= password_input f, :password %>
+    <%= error_tag f, :password %>
+  <% end %>
+
   <div>
     <%= submit "Save" %>
   </div>

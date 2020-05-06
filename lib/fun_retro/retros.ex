@@ -144,6 +144,24 @@ defmodule FunRetro.Retros do
   end
 
   @doc """
+  Gets a single board.
+
+  Raises `Ecto.NoResultsError` if the Board does not exist.
+
+  ## Examples
+
+      iex> get_board!(123)
+      %Board{}
+
+      iex> get_board!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_board_without_drawings!(id) do
+    Repo.get!(Board, id)
+  end
+
+  @doc """
   Get lanes from a single board.
 
   Raises `Ecto.NoResultsError` if the Board does not exist.
@@ -229,5 +247,53 @@ defmodule FunRetro.Retros do
   """
   def change_board(%Board{} = board, attrs \\ %{}) do
     Board.changeset(board, attrs)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking board changes. With a password field.
+
+  ## Examples
+
+      iex> change_board(board)
+      %Ecto.Changeset{data: %Board{}}
+
+  """
+  def change_registration(%Board{} = board, params) do
+    Board.registration_changeset(board, params)
+  end
+
+  @doc """
+  Creates a board, with a hashed password.
+
+  ## Examples
+
+      iex> create_board(%{field: value})
+      {:ok, %Board{}}
+
+      iex> create_board(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def register_board(attrs \\ %{}) do
+    %Board{}
+    |> Board.registration_changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc false
+  def authenticate_board(board_id, given_pass) do
+    board = get_board_without_drawings!(board_id)
+
+    cond do
+      board && Pbkdf2.verify_pass(given_pass, board.password_hash) ->
+        {:ok, board}
+
+      board ->
+        {:error, :unauthorized}
+
+      true ->
+        Pbkdf2.no_user_verify()
+        {:error, :not_found}
+    end
   end
 end

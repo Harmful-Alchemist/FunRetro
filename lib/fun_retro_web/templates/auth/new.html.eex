@@ -1,0 +1,10 @@
+<h1>Authenticate for drawing</h1>
+
+<%= form_for @conn,Routes.board_auth_path(@conn, :create, @board_id ),[as: :session], fn f ->  %>
+<div>
+    <%= label f, :password %>
+    <%= password_input f, :password %>
+    <%= error_tag f, :password %>
+</div>
+<%= submit "Authenticate" %>
+<% end %>
