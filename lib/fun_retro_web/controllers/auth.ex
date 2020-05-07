@@ -15,7 +15,6 @@ defmodule FunRetroWeb.Auth do
     conn = update_in(conn.assigns, &Map.put(&1, :current_board, board))
 
     conn
-    #    |> assign(:current_board, board)
     |> put_session(:board_id_auth, board.id)
     |> configure_session(renew: true)
   end

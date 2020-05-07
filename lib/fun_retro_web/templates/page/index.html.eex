@@ -4,4 +4,5 @@
 </section>
 
 <p>On this site you can create your own board with columns or lanes to share, secured with a password. After creating you board, share the link and password (don't share this publicly or everyone will be able to access your board) with your collaborators and get started with drawing!</p>
+<p>Touch screens unfortunately not yet supported</p>
 <span><%= link "New Board", to: Routes.board_path(@conn, :new) %></span>

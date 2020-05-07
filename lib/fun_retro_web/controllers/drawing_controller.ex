@@ -33,7 +33,11 @@ defmodule FunRetroWeb.DrawingController do
         |> redirect(to: Routes.board_path(conn, :show, drawing.board_id))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", board_id: board_id, changeset: changeset)
+        render(conn, "new.html",
+          board_id: board_id,
+          changeset: changeset,
+          lanes: Retros.get_lanes_board!(board_id)
+        )
     end
   end
 
@@ -65,7 +69,11 @@ defmodule FunRetroWeb.DrawingController do
         |> redirect(to: Routes.board_path(conn, :show, drawing.board_id))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", drawing: drawing, changeset: changeset)
+        render(conn, "edit.html",
+          drawing: drawing,
+          changeset: changeset,
+          lanes: Retros.get_lanes_board!(drawing.board_id)
+        )
     end
   end
 

@@ -15,7 +15,6 @@ defmodule FunRetroWeb.BoardLive do
   end
 
   def handle_info(id, socket) do
-    IO.puts("yeah yeah")
     board = Retros.get_board!(id)
     {:noreply, assign(socket, :board, board)}
   end
