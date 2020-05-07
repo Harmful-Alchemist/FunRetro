@@ -32,10 +32,6 @@ defmodule FunRetroWeb.BoardController do
   end
 
   def show(conn, params) do
-    #    redirect(conn,
-    #      to: Routes.live_path(FunRetroWeb.Endpoint, FunRetroWeb.BoardLive, %Board{id: id})
-    #    )
-    IO.inspect(params)
     live_render(conn, BoardLive, session: params)
   end
 
@@ -71,9 +67,6 @@ defmodule FunRetroWeb.BoardController do
   end
 
   defp authenticate(%{params: %{"id" => board_id}} = conn, _opts) do
-    IO.puts("hellooooooooo")
-    IO.inspect(conn)
-
     if conn.assigns.current_board && "#{conn.assigns.current_board.id}" == board_id do
       conn
     else

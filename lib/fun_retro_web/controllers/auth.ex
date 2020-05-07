@@ -12,9 +12,7 @@ defmodule FunRetroWeb.Auth do
   end
 
   def login(conn, board) do
-    IO.inspect(conn)
     conn = update_in(conn.assigns, &Map.put(&1, :current_board, board))
-    IO.inspect(conn)
 
     conn
     #    |> assign(:current_board, board)
