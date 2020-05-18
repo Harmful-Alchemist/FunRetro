@@ -73,7 +73,7 @@ defmodule FunRetroWeb.BoardController do
       conn
       |> put_flash(
         :error,
-        "You must be have access to this board please authenticate with a password"
+        "You must have access to this board, please authenticate with a password"
       )
       |> redirect(to: Routes.board_auth_path(conn, :new, board_id))
       |> halt()
