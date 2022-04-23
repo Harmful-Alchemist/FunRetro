@@ -7,4 +7,4 @@ This project is an attempt to make that happen digitally.
 
 It's a project build in elixir using phoenix. It uses a little of the phoenix liveview functionality.
 
-Use it at https://funretro.fun/
+Used to be at https://funretro.fun/
